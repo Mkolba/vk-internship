@@ -1,4 +1,2 @@
-export * from './Avatar/Avatar';
-export * from './Button/Button';
-export * from './Input/Input';
-export * from './Layout/Layout';
+export * from './Page/Page';
+export * from './Header/Header';

@@ -1,4 +1,4 @@
-.AuthCard__Wrapper {
+.RegCard__Wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,21 +6,35 @@
   row-gap: 24px;
   flex-grow: 1;
 
-  .AuthCard {
+  .RegCard {
     background: var(--vkui--color_background_tertiary);
     @media screen and (max-width: 768px) {
       background: var(--vkui--color_background_content);
     }
-    max-width: 360px;
+    max-width: 400px;
     width: 100%;
     box-sizing: border-box;
     padding: 24px 16px;
 
-    .AuthCard__Header {
-      text-align: center;
+    .RegCard__Header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-weight: 600;
+      width: 100%;
       font-size: 20px;
+      box-sizing: border-box;
+      padding: 0 14px;
       padding-bottom: 16px;
+
+      .vkuiButton, .vkuiButton__in {
+        min-width: 24px;
+        width: 24px;
+        .vkuiButton__content {
+          padding: 0;
+          transform: scaleX(-1);
+        }
+      }
     }
 
     .vkuiFormItem {
@@ -29,16 +43,6 @@
 
     .ButtonFormItem {
       padding-top: 24px;
-    }
-
-    &:is(.RegCard) {
-      padding: 24px 28px;
-      .RegBenefits {
-        font-size: 14px;
-        color: var(--vkui--color_text_secondary);
-        text-align: center;
-        padding-top: 12px;
-      }
     }
   }
 }

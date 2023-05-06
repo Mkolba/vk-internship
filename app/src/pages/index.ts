@@ -5,3 +5,4 @@ export * from './MessengerPage/MessengerPage';
 export * from './NewsfeedPage/NewsfeedPage';
 export * from './NotFoundPage/NotFoundPage';
 export * from './ProfilePage/ProfilePage';
+export * from './RegistrationPage/RegistrationPage';

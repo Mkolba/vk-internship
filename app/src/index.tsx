@@ -4,6 +4,9 @@ import './styles/index.scss';
 import { App } from './App';
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
+import '@vkontakte/vkui/dist/vkui.css';
+import './styles/index.scss';
+import './styles/colors.scss';
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
