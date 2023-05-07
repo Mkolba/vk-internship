@@ -1,0 +1,65 @@
+.NewPost__layout {
+  display: flex;
+  column-gap: 4px;
+  align-items: stretch;
+
+  .NewPost__column {
+    display: flex;
+    flex-direction: column;
+
+    &:is(.NewPost__column--withTextarea) {
+      align-items: flex-end;
+      flex-grow: 1;
+    }
+  }
+
+  .NewPost__textarea__row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+
+    .NewPost__textarea {
+      border: none;
+      background-color: transparent;
+      resize: none;
+      outline: none;
+      box-sizing: border-box;
+      font-family: var(--vkui--font_family_base);
+      font-size: 12px;
+      width: 100%;
+
+      .vkuiFormField__border, .vkuiFocusVisible {
+        border: none;
+      }
+    }
+
+    .AttachPhotoButton {
+      margin-right: 12px;
+      min-width: 0;
+      .vkuiButton__content {
+        padding: 0 4px;
+      }
+    }
+  }
+
+  .NewPost__controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 6px;
+
+    .PostButton {
+      max-width: 130px;
+      margin-right: 12px;
+    }
+
+    .AttachPhotoButton {
+      margin-right: 12px;
+      min-width: 0;
+      .vkuiButton__content {
+        padding: 0 4px;
+      }
+    }
+  }
+}

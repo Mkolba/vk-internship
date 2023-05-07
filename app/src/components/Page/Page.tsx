@@ -7,11 +7,12 @@ import './Page.scss';
 export const Page: React.FC<Omit<ViewProps, 'activePanel'>> = ({
     id='',
     children,
+    className,
     ...restProps
 }) => {
     return (
-        <View {...restProps} activePanel={id}>
-            <Panel id={id}>
+        <View {...restProps} activePanel={id} id={id}>
+            <Panel id={id} className={className}>
                 {children}
             </Panel>
         </View>

@@ -1,0 +1,15 @@
+.FriendsCard__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 4fr));
+  row-gap: 1em;
+  padding: 6px 0;
+
+  .FriendsCard__list__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 14px;
+    padding: 6px 0;
+  }
+}
