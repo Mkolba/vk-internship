@@ -12,7 +12,7 @@ export const Page: React.FC<Omit<ViewProps, 'activePanel'>> = ({
 }) => {
     return (
         <View {...restProps} activePanel={id} id={id}>
-            <Panel id={id} className={className}>
+            <Panel id={id} className={'Page' + (className ? ` ${className}` : '')}>
                 {children}
             </Panel>
         </View>

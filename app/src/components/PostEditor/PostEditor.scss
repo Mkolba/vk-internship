@@ -1,3 +1,9 @@
+.vkuiGroup {
+  @media screen and (max-width: 768px) {
+    padding: 0 12px !important;
+  }
+}
+
 .NewPost__layout {
   display: flex;
   column-gap: 4px;
@@ -26,8 +32,14 @@
       outline: none;
       box-sizing: border-box;
       font-family: var(--vkui--font_family_base);
-      font-size: 12px;
+      font-size: 12px !important;
+      min-height: 34px !important;
       width: 100%;
+
+      textarea {
+        font-size: 15px !important;
+        padding: 6px 12px ;
+      }
 
       .vkuiFormField__border, .vkuiFocusVisible {
         border: none;

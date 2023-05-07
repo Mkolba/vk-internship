@@ -4,6 +4,7 @@ import './UserCard.scss';
 import {Avatar, Button, Group, Cell} from "@vkontakte/vkui";
 import {Icon24DeleteOutline, Icon24EducationOutline, Icon24PenOutline, Icon24PlaceOutline} from "@vkontakte/icons";
 import {Popover} from "@vkontakte/vkui/dist/components/Popover/Popover";
+import {useScreenType} from "../../hooks";
 
 export function declOfAge(n: number) {
     let text_forms = ['год', 'года', 'лет'];
@@ -22,6 +23,7 @@ interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export const UserCard: React.FC<UserCardProps> = ({
     user
 }) => {
+    const screenType = useScreenType();
     return (
         <Group className={'UserCard__wrapper'}>
             <div className={'UserInfo__cover'}/>
@@ -33,7 +35,7 @@ export const UserCard: React.FC<UserCardProps> = ({
                             <Cell before={<Icon24DeleteOutline fill={'red'}/>}>Удалить фотографию</Cell>
                         </>
                     }>
-                        <Avatar src={user.avatar ? user.avatar : 'https://vk.com/images/camera_200.png'} size={128}/>
+                        <Avatar src={user.avatar ? user.avatar : 'https://vk.com/images/camera_200.png'} size={screenType === 'desktop' ? 128 : 96}/>
                     </Popover>
                 </div>
                 <div className={'UserInfo'}>
@@ -58,11 +60,7 @@ export const UserCard: React.FC<UserCardProps> = ({
                         }
                     </div>
                 </div>
-                <div className={'UserCard__Controls'}>
-                    <Button before={<Icon24PenOutline/>} mode={"secondary"} size={'l'}>
-                        Редактировать
-                    </Button>
-                </div>
+
             </div>
         </Group>
     )

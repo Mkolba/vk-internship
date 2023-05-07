@@ -1,6 +1,8 @@
 .vkuiAppRoot {
   .vkuiPopoutRoot {
-    max-height: calc(100% - 130px);
+    @media screen and (min-width: 1200px) {
+      max-height: calc(100% - 130px);
+    }
   }
   .vkuiSplitLayout__inner:is(.MainLayout) {
     display: flex;
@@ -14,9 +16,12 @@
 }
 
 .Page {
+  overflow-x: hidden;
   max-width: 1320px;
 
   .PageLayout {
-    padding-top: 32px;
+    @media screen and (min-width: 1200px) {
+      padding-top: 32px;
+    }
   }
 }
