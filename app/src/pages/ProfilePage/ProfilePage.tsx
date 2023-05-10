@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './ProfilePage.scss';
-import {FriendsCard, PostEditor, Wall} from "../../components";
+import {FriendsCard, PostEditor, Wall, UserCard} from "../../components";
 import {Group, Header, Placeholder, Spinner, SplitCol, SplitLayout} from "@vkontakte/vkui";
 import {useAtomValue} from "@mntm/precoil";
 import {currentUserAtom} from "../../store";
-import {UserCard} from "../../components/UserCard/UserCard";
 import {Icon56NewsfeedOutline, Icon28IncognitoOutline} from "@vkontakte/icons";
 import {useParams} from "react-router-dom";
 import {useScreenType} from "../../hooks";
@@ -28,8 +27,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
     useEffect(() => {
         setIsFetching(true);
         api.getUser(Number(userId)).then(data => {
-            setUser(data);
             api.getWall(Number(userId)).then(posts => {
+                setUser(data);
                 setIsFetching(false);
                 setFetchedPosts(posts);
             }).catch(err => {

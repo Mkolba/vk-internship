@@ -7,5 +7,4 @@ from .user import User
 
 
 class Friend(User):
-    status: int
     is_yours: Optional[bool]

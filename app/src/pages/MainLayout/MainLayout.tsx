@@ -8,6 +8,8 @@ import {
     Icon28UserCircleOutline,
     Icon28UsersOutline
 } from "@vkontakte/icons";
+import {useAtomValue} from "@mntm/precoil";
+import {currentUserAtom} from "../../store";
 
 interface MainLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -19,6 +21,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const screenType = useScreenType();
     const navigate = useNavigate();
     const location = useLocation().pathname.split("/")[1];
+    const user = useAtomValue(currentUserAtom);
     return (
         <Page className={'MainLayout'}>
             <SplitLayout className={'PageLayout'}>
@@ -27,7 +30,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     <Epic activeStory={'main'} tabbar={screenType === 'mobile' && (
                         <Tabbar>
                             <TabbarItem
-                                onClick={() => navigate('/profile/1')}
+                                onClick={() => navigate(`/profile/${user?.id}`)}
                                 selected={location === 'profile'}
                                 text="Профиль"
                             >
@@ -41,7 +44,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                                 <Icon28NewsfeedOutline/>
                             </TabbarItem>
                             <TabbarItem
-                                onClick={() => navigate('/friends')}
+                                onClick={() => navigate(`/friends/${user?.id}`)}
                                 selected={location === 'friends'}
                                 text="Друзья"
                             >

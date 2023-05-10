@@ -93,15 +93,15 @@ async def get_wall(
         like_alias_2,
         and_(
             Post.id == like_alias_2.post_id,
-            like_alias_2.user_id == user.id
+            like_alias_2.user_id == current_user.id
         ),
         isouter=True
     ).where(
         Post.wall_id == user.id
     ).group_by(Post.id).order_by(desc(Post.date))
     posts = await db.execute(posts_query)
-
-    return list([schemas.Post(is_liked=i.is_liked > 0, likes_count=i.likes_count, **i.Post.__dict__) for i in posts.fetchall()])
+    posts = posts.fetchall()
+    return list([schemas.Post(is_liked=i.is_liked > 0, likes_count=i.likes_count, **i.Post.__dict__) for i in posts])
 
 
 @router.get("/{user_id}", response_model=schemas.User)
@@ -113,11 +113,19 @@ async def get_profile(
     if user.id != current_user.id:
         friend = await db.execute(select(Friend.status, Friend.user_id).where(
             or_(
-                Friend.user_id == user.id,
-                Friend.friend_id == user.id
+                and_(
+                    Friend.user_id == user.id,
+                    Friend.friend_id == current_user.id
+                ),
+                and_(
+                    Friend.user_id == current_user.id,
+                    Friend.friend_id == user.id
+                ),
             )
+
         ))
         friend = friend.fetchone()
+        print(friend)
         if not friend:
             friend_status = 0
         else:

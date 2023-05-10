@@ -43,7 +43,7 @@ export const App: React.FC = () => {
                       <Route path={'messenger'} element={<MessengerPage/>}/>
                       <Route path={'newsfeed'} element={<NewsfeedPage/>}/>
                       <Route path={'messenger/:userId'} element={<DialogPage/>}/>
-                      <Route path={'friends'} element={<FriendsPage/>}/>
+                      <Route path={'friends/:userId'} element={<FriendsPage/>}/>
                       <Route path="/" element={<Navigate to="/login" replace={true}/>} />
                   </Route>
               </Routes>

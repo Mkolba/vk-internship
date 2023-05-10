@@ -22,10 +22,7 @@ export const NavMenu: React.FC = () => {
             <Cell before={<Icon24NewsfeedOutline/>} onClick={() => navigate('/newsfeed')}>
                 Новости
             </Cell>
-            <Cell before={<Icon24MessagesOutline/>} onClick={() => navigate('/messenger')}>
-                Мессенджер
-            </Cell>
-            <Cell before={<Icon24UsersOutline/>} onClick={() => navigate('/friends')}>
+            <Cell before={<Icon24UsersOutline/>} onClick={() => navigate(`/friends/${user?.id}`)}>
                 Друзья
             </Cell>
         </SplitCol>

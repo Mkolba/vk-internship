@@ -23,7 +23,7 @@ async def get_friends(
         Photo.url,
         User.first_name,
         User.last_name,
-        Friend.status.label('status'),
+        Friend.status.label('friend_status'),
         Friend.user_id
     ).select_from(Friend).join(User, (
         and_(
