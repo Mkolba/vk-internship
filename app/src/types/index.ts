@@ -4,13 +4,30 @@ export type ThemeType = 'light' | 'dark';
 
 export type ScreenType = 'desktop' | 'mobile';
 
+export interface IPhoto {
+    id?: string,
+    uploaded_by?: number,
+    url: string
+}
+
+export interface IPost {
+    id: number,
+    wall_id: number,
+    creator: UserType,
+    date: string,
+    is_liked: boolean,
+    likes_count: number,
+    photo?: IPhoto,
+    text?: string
+}
+
 export type UserType = {
     id: number,
-    token: string,
-    avatar?: string,
+    avatar: IPhoto,
     first_name: string,
     last_name: string,
     city?: string,
     age?: number,
     study_place?: string
+    friend_status?: number
 }

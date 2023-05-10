@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import {
     DialogPage,
@@ -17,10 +17,16 @@ import {ConfigProvider, AdaptivityProvider, AppRoot, SplitLayout} from "@vkontak
 import {Header} from "./components";
 import {MainLayout} from "./pages/MainLayout/MainLayout";
 import {useScreenType} from "./hooks";
+import {api} from "./api";
 
 export const App: React.FC = () => {
   const popout = useAtomValue(popoutAtom);
   const screenType = useScreenType();
+
+  useEffect(() => {
+      api.authUser();
+  }, [])
+
   return (
       <ConfigProvider appearance="light" platform="vkcom">
         <AdaptivityProvider>

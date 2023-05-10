@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import './LoginPage.scss';
 import {Page} from "../../components";
-import {Card, FormLayout, FormItem, Input, Button, ScreenSpinner, Tappable} from "@vkontakte/vkui";
+import {Card, FormLayout, FormItem, Input, Button, ScreenSpinner, Tappable, FormStatus} from "@vkontakte/vkui";
 import {useSetAtomState} from "@mntm/precoil";
 import {popoutAtom} from "../../store";
 import {useNavigate} from "react-router-dom";
 import {Icon16HideOutline, Icon16ViewOutline} from "@vkontakte/icons";
+import {api} from "../../api";
 
 interface LoginPageProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -19,11 +20,27 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [showError, setShowError] = useState(false);
+    const [errorText, setErrorText] = useState('');
     const navigate = useNavigate();
 
     const authorize = () => {
         if (login && password) {
-            setShowError(false);
+            const data = new FormData();
+            data.append('username', login)
+            data.append('password', password)
+            setPopout(<ScreenSpinner/>);
+            api.login({formData: data}).then(data => {
+                const {payload} = api.getToken()
+                setPopout(null);
+                navigate(`/profile/${payload['sub']}`)
+            }).catch(error => {
+                setPopout(null);
+                error.then((err: any) => {
+                    if (err.detail) {
+                        setErrorText(err.detail)
+                    }
+                })
+            })
         } else {
             setShowError(true);
         }
@@ -37,6 +54,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                         Вход в NOTVK
                     </div>
                     <FormLayout>
+                        {errorText &&
+                            <FormStatus mode={'error'}>
+                                {errorText}
+                            </FormStatus>
+                        }
                         <FormItem status={showError && !login ? 'error' : 'default'}>
                             <Input placeholder={'Логин'} name={'email'} value={login} onChange={e => setLogin(e.currentTarget.value)}/>
                         </FormItem>

@@ -16,7 +16,7 @@ export const NavMenu: React.FC = () => {
     const user = useAtomValue(currentUserAtom);
     return (
         <SplitCol maxWidth={220} width={'100%'}>
-            <Cell before={<Icon24UserCircleOutline/>} onClick={() => navigate(`/id${user?.id}`)}>
+            <Cell before={<Icon24UserCircleOutline/>} onClick={() => navigate(`/profile/${user?.id}`)}>
                 Моя страница
             </Cell>
             <Cell before={<Icon24NewsfeedOutline/>} onClick={() => navigate('/newsfeed')}>

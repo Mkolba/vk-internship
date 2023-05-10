@@ -14,11 +14,15 @@
   .UserCard {
     padding: 12px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     column-gap: 16px;
     position: relative;
     min-height: 60px;
+
+    @media screen and (max-width: 1200px) {
+      flex-direction: column;
+    }
 
     .UserInfo__avatar {
       border-radius: 50%;
@@ -26,52 +30,76 @@
       margin-top: -64px;
     }
 
-    .UserInfo {
-      flex-grow: 1;
+    .UserInfo__general {
       display: flex;
       justify-content: flex-start;
-      align-items: flex-end;
+      align-items: center;
       column-gap: 24px;
+      width: 100%;
 
       @media screen and (max-width: 1200px) {
         flex-direction: column;
-        align-items: flex-start;
       }
 
-      .UserInfo__name {
-        height: 100%;
-        font-weight: 600;
-        font-size: 22px;
+      .UserInfo {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        column-gap: 24px;
+        @media screen and (max-width: 1200px) {
+          flex-direction: column;
+          align-items: center;
+        }
 
-        .UserInfo__age {
-          font-weight: 400;
+        .UserInfo__name {
+          height: 100%;
+          font-weight: 600;
+          font-size: 22px;
+
+          .UserInfo__age {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--vkui--color_text_secondary);
+          }
+        }
+
+        .UserInfo__other {
+          height: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-end;
+          column-gap: 24px;
           font-size: 14px;
           color: var(--vkui--color_text_secondary);
         }
-      }
 
-      .UserInfo__other {
-        height: 100%;
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
-        column-gap: 24px;
-        font-size: 14px;
-        color: var(--vkui--color_text_secondary);
-      }
+        .UserInfo__other__item {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-direction: column;
+          column-gap: 8px;
 
-      .UserInfo__other__item {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        flex-direction: column;
-        column-gap: 8px;
-
-        @media screen and (max-width: 1200px) {
-          padding-top: 12px;
-          flex-direction: row;
-          align-items: flex-start;
+          @media screen and (max-width: 1200px) {
+            padding-top: 12px;
+            flex-direction: row;
+            align-items: center;
+          }
         }
+      }
+    }
+
+    .UserInfo__controls {
+      display: flex;
+      column-gap: 24px;
+      @media screen and (max-width: 1200px) {
+        width: 100%;
+        padding-top: 24px;
+      }
+      @media screen and (max-width: 500px) {
+        flex-direction: column;
+        row-gap: 12px;
+        padding-top: 24px;
       }
     }
   }

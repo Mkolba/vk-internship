@@ -1,10 +1,20 @@
 import React from "react";
-import {UserType} from "../../types";
+import {AnyFunction, UserType} from "../../types";
 import './UserCard.scss';
-import {Avatar, Button, Group, Cell} from "@vkontakte/vkui";
-import {Icon24DeleteOutline, Icon24EducationOutline, Icon24PenOutline, Icon24PlaceOutline} from "@vkontakte/icons";
+import {Avatar, Button, Group, Cell, ScreenSpinner} from "@vkontakte/vkui";
+import {
+    Icon24CancelOutline,
+    Icon24DeleteOutline,
+    Icon24EducationOutline,
+    Icon24PenOutline,
+    Icon24PlaceOutline,
+    Icon24UserAddOutline
+} from "@vkontakte/icons";
 import {Popover} from "@vkontakte/vkui/dist/components/Popover/Popover";
 import {useScreenType} from "../../hooks";
+import {useAtomState, useAtomValue, useSetAtomState} from "@mntm/precoil";
+import {currentUserAtom, popoutAtom} from "../../store";
+import {api} from "../../api";
 
 export function declOfAge(n: number) {
     let text_forms = ['год', 'года', 'лет'];
@@ -17,50 +27,139 @@ export function declOfAge(n: number) {
 }
 
 interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    user: UserType
+    user: UserType,
+    setUser: AnyFunction
 }
 
 export const UserCard: React.FC<UserCardProps> = ({
-    user
+    user,
+    setUser
 }) => {
+    const setPopout = useSetAtomState(popoutAtom);
+    const [currentUser, setCurrentUser] = useAtomState(currentUserAtom);
     const screenType = useScreenType();
+
+    const addFriend = () => {
+        setPopout(<ScreenSpinner/>)
+        api.addFriend(user.id).then(data => {
+            user.friend_status = data.friend_status
+            setCurrentUser(currentUser)
+            setPopout(null)
+        }).catch(err => {
+            setPopout(null)
+        })
+    }
+
+    const delFriend = () => {
+        setPopout(<ScreenSpinner/>)
+        api.delFriend(user.id).then(data => {
+            user.friend_status = data.friend_status
+            setCurrentUser(currentUser)
+            setPopout(null)
+        }).catch(err => {
+            setPopout(null)
+        })
+    }
+
+    const onEditAvatar = () => {
+        let input = document.createElement('input');
+        input.accept = 'image/png,image/jpeg,image/jpg';
+        input.multiple = true;
+        input.onchange = (e: any) => editAvatar(e.target.files[0]);
+        input.type = 'file';
+        input.click();
+    }
+
+    const editAvatar = (file: any) => {
+        const data = new FormData()
+        data.append('file', file)
+        api.uploadPhoto(data).then(data => {
+            api.editUser({avatar_id: data.id}).then(resp => {
+                setCurrentUser(resp as UserType)
+                setUser(resp as UserType)
+            })
+        })
+    }
+
+    const delAvatar = () => {
+        api.editUser({avatar_id: 'delete'}).then(resp => {
+            setCurrentUser(resp as UserType)
+            setUser(resp as UserType)
+        })
+    }
+
     return (
         <Group className={'UserCard__wrapper'}>
             <div className={'UserInfo__cover'}/>
             <div className={'UserCard'}>
-                <div className={'UserInfo__avatar'}>
-                    <Popover action={'hover'} content={
+                <div className={'UserInfo__general'}>
+                    <div className={'UserInfo__avatar'}>
+                        {
+                            user.id === currentUser?.id ?
+                                <Popover action={'hover'} content={
+                                    <>
+                                        <Cell before={<Icon24PenOutline/>} onClick={onEditAvatar}>Обновить фотографию</Cell>
+                                        <Cell before={<Icon24DeleteOutline fill={'red'}/>} onClick={delAvatar}>Удалить фотографию</Cell>
+                                    </>
+                                }>
+                                    <Avatar src={user.avatar ? user.avatar.url : 'https://vk.com/images/camera_200.png'} size={screenType === 'desktop' ? 128 : 96}/>
+                                </Popover>
+                            :
+                                <Avatar src={user.avatar ? user.avatar.url : 'https://vk.com/images/camera_200.png'} size={screenType === 'desktop' ? 128 : 96}/>
+                        }
+                    </div>
+                    <div className={'UserInfo'}>
+                        <div className={'UserInfo__name'}>
+                            {user.first_name} {user.last_name}
+                            {user.age &&
+                                <div className={'UserInfo__age'}>
+                                    {user.age} {declOfAge(user.age)}
+                                </div>
+                            }
+                        </div>
+                        <div className={'UserInfo__other'}>
+                            {user.city &&
+                                <div className={'UserInfo__other__item'}>
+                                    <Icon24PlaceOutline/> {user.city}
+                                </div>
+                            }
+                            {user.study_place &&
+                                <div className={'UserInfo__other__item'}>
+                                    <Icon24EducationOutline/> {user.study_place}
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div className={'UserInfo__controls'}>
+                    {currentUser?.id === user.id &&
+                        <Button size={'m'} mode={'secondary'} before={<Icon24PenOutline/>} stretched={screenType === 'mobile'}>
+                            Редактировать
+                        </Button>
+                    }
+                    {currentUser?.id !== user.id &&
                         <>
-                            <Cell before={<Icon24PenOutline/>}>Обновить фотографию</Cell>
-                            <Cell before={<Icon24DeleteOutline fill={'red'}/>}>Удалить фотографию</Cell>
+                            {(!user.friend_status || [0, 1].includes(user.friend_status)) ?
+                                <Button size={'m'} before={<Icon24UserAddOutline/>} mode={'secondary'} onClick={addFriend} stretched={screenType === 'mobile'}>
+                                    {user.friend_status === 0 ? 'Добавить в друзья' : 'Одобрить заявку'}
+                                </Button>
+                                : null
+                            }
+                            {(user.friend_status && [1, 2, 3].includes(user.friend_status)) ?
+                                <Button size={'m'} before={<Icon24CancelOutline/>} className={'Button--dangerous'} onClick={delFriend} stretched={screenType === 'mobile'}>
+                                    {user.friend_status === 1 ?
+                                        'Отклонить заявку'
+                                        : user.friend_status === 2 ?
+                                            'Удалить из друзей'
+                                            :
+                                            'Отозвать заявку'
+                                    }
+                                </Button>
+                                : null
+                            }
                         </>
-                    }>
-                        <Avatar src={user.avatar ? user.avatar : 'https://vk.com/images/camera_200.png'} size={screenType === 'desktop' ? 128 : 96}/>
-                    </Popover>
+                    }
                 </div>
-                <div className={'UserInfo'}>
-                    <div className={'UserInfo__name'}>
-                        {user.first_name} {user.last_name}
-                        {user.age &&
-                            <div className={'UserInfo__age'}>
-                                {user.age} {declOfAge(user.age)}
-                            </div>
-                        }
-                    </div>
-                    <div className={'UserInfo__other'}>
-                        {user.city &&
-                            <div className={'UserInfo__other__item'}>
-                                <Icon24PlaceOutline/> {user.city}
-                            </div>
-                        }
-                        {user.study_place &&
-                            <div className={'UserInfo__other__item'}>
-                                <Icon24EducationOutline/> {user.study_place}
-                            </div>
-                        }
-                    </div>
-                </div>
-
             </div>
         </Group>
     )
