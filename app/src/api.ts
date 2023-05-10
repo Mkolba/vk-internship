@@ -131,6 +131,16 @@ class API {
             return Promise.reject(error)
         })
     }
+
+    register(options: {first_name: string, last_name: string, password: string, login: string, birthdate?: string}) {
+        return this.call(`/register`, 'POST', options).then(data => {
+            localStorage.setItem('jwt-token', data.access_token)
+            this.authUser();
+            return Promise.resolve({success: true})
+        }).catch(error => {
+            return Promise.resolve(error)
+        })
+    }
 }
 
 export const api = new API();

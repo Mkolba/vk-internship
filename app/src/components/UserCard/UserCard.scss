@@ -44,7 +44,7 @@
       .UserInfo {
         display: flex;
         justify-content: flex-start;
-        align-items: flex-start;
+        align-items: flex-end;
         column-gap: 24px;
         @media screen and (max-width: 1200px) {
           flex-direction: column;
@@ -52,6 +52,7 @@
         }
 
         .UserInfo__name {
+          align-self: stretch;
           height: 100%;
           font-weight: 600;
           font-size: 22px;

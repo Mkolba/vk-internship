@@ -13,7 +13,7 @@ export interface IPhoto {
 export interface IPost {
     id: number,
     wall_id: number,
-    creator: UserType,
+    creator: IUser,
     date: string,
     is_liked: boolean,
     likes_count: number,
@@ -21,7 +21,7 @@ export interface IPost {
     text?: string
 }
 
-export type UserType = {
+export interface IUser {
     id: number,
     avatar: IPhoto,
     first_name: string,
@@ -29,5 +29,6 @@ export type UserType = {
     city?: string,
     age?: number,
     study_place?: string
-    friend_status?: number
+    friend_status?: number,
+    birthdate?: string
 }

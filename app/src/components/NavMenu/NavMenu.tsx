@@ -1,7 +1,6 @@
 import React from "react";
-import {Cell, Group, SplitCol} from "@vkontakte/vkui";
+import {Cell, SplitCol} from "@vkontakte/vkui";
 import {
-    Icon24MessagesOutline,
     Icon24NewsfeedOutline,
     Icon24UserCircleOutline,
     Icon24UsersOutline

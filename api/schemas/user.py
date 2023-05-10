@@ -2,7 +2,7 @@
 
 from typing import Optional, Union, Literal
 from pydantic import BaseModel, EmailStr, Field, validator, UUID4
-from datetime import datetime
+from datetime import date
 from decorators import make_optional
 from .photo import PhotoUploaded
 
@@ -12,6 +12,7 @@ class UserCreate(BaseModel):
     password: str = Field(..., min_length=8)
     first_name: str
     last_name: str
+    birthdate: Optional[date]
 
 
 class UserLogin(BaseModel):
@@ -30,7 +31,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     study_place: Optional[str]
-    birthdate: Optional[datetime]
+    birthdate: Optional[date]
     city: Optional[str]
     friend_status: Optional[int]
 

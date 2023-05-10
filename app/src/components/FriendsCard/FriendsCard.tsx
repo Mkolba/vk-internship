@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from "react";
 import {Group, Header, Placeholder, Avatar, Tappable, Separator, Cell, UsersStack, Spinner} from "@vkontakte/vkui";
-import {UserType} from "../../types";
+import {IUser} from "../../types";
 import {useNavigate} from "react-router-dom";
 import './FriendsCard.scss';
 import {useScreenType} from "../../hooks";
 import {api} from "../../api";
 
 interface FriendsCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    user: UserType
+    user: IUser
 }
 export const FriendsCard: React.FC<FriendsCardProps> = ({
     user,
     ...restProps
 }) => {
-    const [friends, setFriends] = useState<UserType[]>([])
+    const [friends, setFriends] = useState<IUser[]>([])
     const [isFetching, setIsFetching] = useState(false);
     const navigate = useNavigate();
     const screenType = useScreenType();
@@ -22,7 +22,7 @@ export const FriendsCard: React.FC<FriendsCardProps> = ({
         setIsFetching(true);
         api.getFriends(user.id).then(data => {
             setIsFetching(false);
-            setFriends(data.filter((item: any) => item.status === 2))
+            setFriends(data.filter((item: any) => item.friend_status === 2))
         }).catch(err => {
             setIsFetching(false)
         })
@@ -35,7 +35,7 @@ export const FriendsCard: React.FC<FriendsCardProps> = ({
                     <Separator className={'FriendsCard__separator'}/>
                     <Group
                         header={screenType === 'desktop' &&
-                            <Header onClick={() => navigate('/friends')}
+                            <Header onClick={() => navigate(`/friends/${user.id}`)}
                                     indicator={screenType === 'desktop' ? friends.length ? friends.length : '' : null}
                             >
                                 Друзья
@@ -45,7 +45,7 @@ export const FriendsCard: React.FC<FriendsCardProps> = ({
                         {friends.length ?
                             screenType === 'desktop' ?
                                 <div className={'FriendsCard__list'}>
-                                    {friends.map(item => (
+                                    {friends.slice(0, 3).map(item => (
                                         <Tappable className={'FriendsCard__list__item'} key={item.id} onClick={() => navigate(`/profile/${item.id}`)}>
                                             <Avatar src={item.avatar?.url} size={64}/>
                                             {item.first_name}
@@ -53,7 +53,7 @@ export const FriendsCard: React.FC<FriendsCardProps> = ({
                                     ))}
                                 </div>
                                 :
-                                <Cell after={<UsersStack photos={friends.map(item => item.avatar.url)}/>} badgeAfterTitle={friends.length ? friends.length : ''}>
+                                <Cell after={<UsersStack photos={friends.slice(0, 3).map(item => item.avatar.url)}/>} badgeAfterTitle={friends.length ? friends.length : ''} onClick={() => navigate(`/friends/${user.id}`)}>
                                     Друзья
                                 </Cell>
                             :

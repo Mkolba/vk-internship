@@ -8,7 +8,7 @@ import {Icon56NewsfeedOutline, Icon28IncognitoOutline} from "@vkontakte/icons";
 import {useParams} from "react-router-dom";
 import {useScreenType} from "../../hooks";
 import {api} from "../../api";
-import {IPost, UserType} from "../../types";
+import {IPost, IUser} from "../../types";
 
 interface ProfilePageProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -18,7 +18,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
 
 })=> {
     const {userId} = useParams();
-    const [user, setUser] = useState<UserType | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
     const [fetchedPosts, setFetchedPosts] = useState<IPost[]>([]);
     const [isFetching, setIsFetching] = useState(false);
 

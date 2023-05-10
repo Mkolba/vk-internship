@@ -5,11 +5,11 @@ import {currentUserAtom, popoutAtom} from "../../store";
 import {Icon24CameraOutline, Icon20Cancel} from "@vkontakte/icons";
 import './PostEditor.scss';
 import {api} from "../../api";
-import {AnyFunction, IPhoto, UserType} from "../../types";
+import {AnyFunction, IPhoto, IUser} from "../../types";
 
 
 interface PostEditorProps extends React.HTMLAttributes<HTMLDivElement> {
-    user: UserType,
+    user: IUser,
     addPost: AnyFunction
 }
 
@@ -78,9 +78,9 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                             { (postText || postPhoto) &&
                                 <div className={'NewPost__controls'}>
                                     {!postPhoto &&
-                                        <Button mode={'tertiary'} className={'AttachPhotoButton'}>
+                                        <File mode={'tertiary'} className={'AttachPhotoButton'} onChange={attachPhoto}>
                                             <Icon24CameraOutline/>
-                                        </Button>
+                                        </File>
                                     }
                                     <Button className={'PostButton'} onClick={createPost}>
                                         Опубликовать

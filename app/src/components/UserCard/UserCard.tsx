@@ -1,5 +1,5 @@
 import React from "react";
-import {AnyFunction, UserType} from "../../types";
+import {AnyFunction, IUser} from "../../types";
 import './UserCard.scss';
 import {Avatar, Button, Group, Cell, ScreenSpinner} from "@vkontakte/vkui";
 import {
@@ -15,6 +15,7 @@ import {useScreenType} from "../../hooks";
 import {useAtomState, useAtomValue, useSetAtomState} from "@mntm/precoil";
 import {currentUserAtom, popoutAtom} from "../../store";
 import {api} from "../../api";
+import {useNavigate} from "react-router-dom";
 
 export function declOfAge(n: number) {
     let text_forms = ['год', 'года', 'лет'];
@@ -26,8 +27,14 @@ export function declOfAge(n: number) {
     return text_forms[2];
 }
 
+function getAge(birthdate: string) {
+    const date = new Date(birthdate);
+    let diff = Date.now() - date.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+}
+
 interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    user: UserType,
+    user: IUser,
     setUser: AnyFunction
 }
 
@@ -38,6 +45,7 @@ export const UserCard: React.FC<UserCardProps> = ({
     const setPopout = useSetAtomState(popoutAtom);
     const [currentUser, setCurrentUser] = useAtomState(currentUserAtom);
     const screenType = useScreenType();
+    const navigate = useNavigate();
 
     const addFriend = () => {
         setPopout(<ScreenSpinner/>)
@@ -75,16 +83,16 @@ export const UserCard: React.FC<UserCardProps> = ({
         data.append('file', file)
         api.uploadPhoto(data).then(data => {
             api.editUser({avatar_id: data.id}).then(resp => {
-                setCurrentUser(resp as UserType)
-                setUser(resp as UserType)
+                setCurrentUser(resp as IUser)
+                setUser(resp as IUser)
             })
         })
     }
 
     const delAvatar = () => {
         api.editUser({avatar_id: 'delete'}).then(resp => {
-            setCurrentUser(resp as UserType)
-            setUser(resp as UserType)
+            setCurrentUser(resp as IUser)
+            setUser(resp as IUser)
         })
     }
 
@@ -111,9 +119,9 @@ export const UserCard: React.FC<UserCardProps> = ({
                     <div className={'UserInfo'}>
                         <div className={'UserInfo__name'}>
                             {user.first_name} {user.last_name}
-                            {user.age &&
+                            {user.birthdate &&
                                 <div className={'UserInfo__age'}>
-                                    {user.age} {declOfAge(user.age)}
+                                    {getAge(user.birthdate)} {declOfAge(getAge(user.birthdate))}
                                 </div>
                             }
                         </div>
@@ -133,7 +141,7 @@ export const UserCard: React.FC<UserCardProps> = ({
                 </div>
                 <div className={'UserInfo__controls'}>
                     {currentUser?.id === user.id &&
-                        <Button size={'m'} mode={'secondary'} before={<Icon24PenOutline/>} stretched={screenType === 'mobile'}>
+                        <Button size={'m'} mode={'secondary'} before={<Icon24PenOutline/>} stretched={screenType === 'mobile'} onClick={() => navigate('/edit')}>
                             Редактировать
                         </Button>
                     }

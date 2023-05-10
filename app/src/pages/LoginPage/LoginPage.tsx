@@ -63,9 +63,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                             <Input placeholder={'Логин'} name={'email'} value={login} onChange={e => setLogin(e.currentTarget.value)}/>
                         </FormItem>
                         <FormItem status={showError && !password ? 'error' : 'default'}>
-                            <Input placeholder={'Пароль'} type={isPasswordVisible ? 'password' : 'text'} autoComplete="current-password" after={
+                            <Input placeholder={'Пароль'} type={isPasswordVisible ? 'text' : 'password'} autoComplete="current-password" after={
                                 <Tappable onClick={() => setPasswordVisible(!isPasswordVisible)}>
-                                    {!isPasswordVisible ? <Icon16HideOutline/> : <Icon16ViewOutline/>}
+                                    {isPasswordVisible ? <Icon16HideOutline/> : <Icon16ViewOutline/>}
                                 </Tappable>
                             } onChange={e => setPassword(e.currentTarget.value)} value={password}/>
                         </FormItem>
