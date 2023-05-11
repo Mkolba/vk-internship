@@ -1,0 +1,123 @@
+.UserCard__wrapper {
+  padding: 0 !important;
+  overflow: hidden;
+
+  .UserInfo__cover {
+    background: rgba(29, 75, 29, 0.32);
+    width: 100%;
+    height: 200px;
+    @media screen and (max-width: 1200px) {
+      height: 140px;
+    }
+  }
+
+  .UserCard {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 16px;
+    position: relative;
+    min-height: 60px;
+
+    @media screen and (max-width: 1200px) {
+      flex-direction: column;
+    }
+
+    .UserInfo__avatar {
+      border-radius: 50%;
+      border: 4px solid var(--vkui--color_background_content);
+      margin-top: -64px;
+    }
+
+    .UserInfo__general {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      column-gap: 24px;
+      width: 100%;
+
+      @media screen and (max-width: 1200px) {
+        flex-direction: column;
+      }
+
+      .UserInfo {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        column-gap: 24px;
+        @media screen and (max-width: 1200px) {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .UserInfo__name {
+          align-self: center;
+          height: 100%;
+          font-weight: 600;
+          font-size: 22px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 200px;
+
+          @media screen and (max-width: 1200px) {
+            text-align: center;
+          }
+
+          .UserInfo__age {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--vkui--color_text_secondary);
+          }
+        }
+
+        .UserInfo__other {
+          height: 100%;
+          display: flex;
+          justify-content: flex-start;
+          align-items: flex-end;
+          column-gap: 24px;
+          font-size: 14px;
+          color: var(--vkui--color_text_secondary);
+        }
+
+        .UserInfo__other__item {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          flex-direction: column;
+          column-gap: 8px;
+          span {
+            max-width: 100px;
+            max-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+
+          @media screen and (max-width: 1200px) {
+            padding-top: 12px;
+            flex-direction: row;
+            align-items: center;
+          }
+        }
+      }
+    }
+
+    .UserInfo__controls {
+      display: flex;
+      column-gap: 24px;
+      @media screen and (max-width: 1200px) {
+        width: 100%;
+        padding-top: 24px;
+      }
+      @media screen and (max-width: 500px) {
+        flex-direction: column;
+        row-gap: 12px;
+        padding-top: 24px;
+      }
+    }
+  }
+}

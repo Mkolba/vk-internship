@@ -1,0 +1,44 @@
+.AuthCard__Wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 24px;
+  flex-grow: 1;
+
+  .AuthCard {
+    background: var(--vkui--color_background_tertiary);
+    @media screen and (max-width: 768px) {
+      background: var(--vkui--color_background_content);
+    }
+    max-width: 360px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 24px 16px;
+
+    .AuthCard__Header {
+      text-align: center;
+      font-weight: 600;
+      font-size: 20px;
+      padding-bottom: 16px;
+    }
+
+    .vkuiFormItem {
+      padding-bottom: 0;
+    }
+
+    .ButtonFormItem {
+      padding-top: 24px;
+    }
+
+    &:is(.RegCard) {
+      padding: 24px 28px;
+      .RegBenefits {
+        font-size: 14px;
+        color: var(--vkui--color_text_secondary);
+        text-align: center;
+        padding-top: 12px;
+      }
+    }
+  }
+}

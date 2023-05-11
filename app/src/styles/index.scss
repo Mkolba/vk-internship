@@ -1,0 +1,15 @@
+.Button--commerce {
+  background-color: #4bb34b !important;
+  color: white !important;
+}
+
+.Button--dangerous {
+  background-color: var(--vkui--color_text_negative) !important;
+  color: white !important;
+}
+
+.vkuiGroup {
+  @media screen and (max-width: 768px) {
+    padding: 0 12px !important;
+  }
+}

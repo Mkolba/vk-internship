@@ -1,0 +1,96 @@
+.NewPost {
+  .NewPost__layout {
+    display: flex;
+    column-gap: 4px;
+    align-items: stretch;
+    @media screen and (max-width: 768px) {
+      padding-bottom: 6px;
+    }
+
+    .NewPost__column {
+      display: flex;
+      flex-direction: column;
+
+      &:is(.NewPost__column--withTextarea) {
+        align-items: flex-end;
+        flex-grow: 1;
+
+        .NewPost__image {
+          align-self: flex-start;
+          padding-top: 12px;
+          position: relative;
+
+          .NewPost__image__deleteButton {
+            background: var(--vkui--color_background_content);
+            border: 1px solid var(--vkui--color_field_border_alpha);
+            padding: 4px;
+            position: absolute;
+            right: 12px;
+            top: 24px;
+          }
+
+          img {
+            border: 1px solid var(--vkui--color_field_border_alpha);
+            border-radius: 8px;
+            max-width: 100%;
+            max-height: 300px;
+          }
+        }
+      }
+    }
+
+    .NewPost__textarea__row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+
+      .NewPost__textarea {
+        border: none;
+        background-color: transparent;
+        resize: none;
+        outline: none;
+        box-sizing: border-box;
+        font-family: var(--vkui--font_family_base);
+        font-size: 12px !important;
+        min-height: 34px !important;
+        width: 100%;
+
+        textarea {
+          font-size: 15px !important;
+          padding: 6px 12px ;
+        }
+
+        .vkuiFormField__border, .vkuiFocusVisible {
+          border: none;
+        }
+      }
+
+      .AttachPhotoButton {
+        min-width: 0;
+        .vkuiButton__content {
+          padding: 0 4px;
+        }
+      }
+    }
+
+    .NewPost__controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 6px;
+      column-gap: 12px;
+
+      .PostButton {
+        max-width: 130px;
+      }
+
+      .AttachPhotoButton {
+        min-width: 0;
+        .vkuiButton__content {
+          padding: 0 4px;
+        }
+      }
+    }
+  }
+}

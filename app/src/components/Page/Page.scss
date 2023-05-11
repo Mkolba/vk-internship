@@ -1,0 +1,26 @@
+.vkuiAppRoot {
+  .vkuiPopoutRoot {
+    @media screen and (min-width: 1200px) {
+      max-height: calc(100% - 64px);
+    }
+  }
+  .vkuiSplitLayout__inner:is(.MainLayout) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .vkuiView {
+      max-width: 1320px;
+    }
+  }
+}
+
+.Page {
+  max-width: 1320px;
+
+  .PageLayout {
+    @media screen and (min-width: 1200px) {
+      padding-top: 32px;
+    }
+  }
+}

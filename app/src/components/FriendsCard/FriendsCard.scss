@@ -1,0 +1,22 @@
+.FriendsCard__separator {
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+.FriendsCard__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 4fr));
+  padding: 6px 0;
+
+  .FriendsCard__list__item {
+    max-width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 14px;
+    padding: 6px 0;
+    row-gap: 6px;
+  }
+}

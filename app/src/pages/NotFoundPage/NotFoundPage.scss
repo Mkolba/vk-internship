@@ -1,0 +1,9 @@
+.NotFoundGhost {
+  animation: animated-ghost 1s infinite;
+}
+
+@keyframes animated-ghost {
+  50% {
+    transform: translateY(-16px);
+  }
+}

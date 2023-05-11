@@ -1,0 +1,11 @@
+.Wall {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  background: var(--vkui--color_background);
+
+  .infinite-scroll-component__outerdiv {
+    width: 100%;
+  }
+}

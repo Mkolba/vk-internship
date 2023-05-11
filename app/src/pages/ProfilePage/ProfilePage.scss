@@ -1,0 +1,11 @@
+.ProfileLayout {
+  .Profile__column:last-child {
+    margin-right: 0 !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    .Wall {
+      padding: 12px 0;
+    }
+  }
+}
