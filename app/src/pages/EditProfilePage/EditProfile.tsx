@@ -4,16 +4,17 @@ import {
     DateInput,
     FormItem,
     FormLayout,
-    FormLayoutGroup,
+    FormLayoutGroup, FormStatus,
     Group,
     Header,
-    Input, ScreenSpinner,
+    Input, Link, ScreenSpinner,
 } from "@vkontakte/vkui";
 import {useAtomState, useSetAtomState} from "@mntm/precoil";
 import {currentUserAtom, popoutAtom} from "../../store";
 import {api} from "../../api";
 import {IUser} from "../../types";
 import './EditProfile.scss';
+import {useNavigate} from "react-router-dom";
 
 interface EditProfileProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -32,6 +33,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = () => {
         return new Date()
     })
 
+    const navigate = useNavigate();
 
     const edit = () => {
         if (!firstName || !lastName) {
@@ -49,9 +51,11 @@ export const EditProfilePage: React.FC<EditProfileProps> = () => {
         setPopout(<ScreenSpinner/>)
         api.editUser(options).then(resp => {
             setCurrentUser(resp as IUser)
-            setPopout(null)
+            setPopout(<ScreenSpinner state={'done'}/>)
+            setTimeout(() => setPopout(null), 1000)
         }).catch(() => {
-            setPopout(null)
+            setPopout(<ScreenSpinner state={'error'}/>)
+            setTimeout(() => setPopout(null), 1000)
         })
     }
 
@@ -82,6 +86,11 @@ export const EditProfilePage: React.FC<EditProfileProps> = () => {
                         disableFuture
                     />
                 </FormItem>
+
+                <FormStatus>
+                    Аватар можно изменить прямо с <Link onClick={() => navigate(`/profile/${currentUser?.id}`)}>вашей страницы</Link> — просто нажмите на него и выберите нужный подпункт в меню
+                </FormStatus>
+
                 <FormItem className={'ButtonFormItem'}>
                     <Button stretched={true} size={'l'} onClick={edit}>
                         Изменить данные

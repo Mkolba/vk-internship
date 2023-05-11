@@ -11,14 +11,13 @@ interface PostProps extends React.HTMLAttributes<HTMLDivElement> {
     post: IPost
 }
 
-
 export const Post: React.FC<PostProps> = ({
     post
 }) => {
     const [likesCount, setLikesCount] = useState(post.likes_count)
     const [isLiked, setIsLiked] = useState(post.is_liked)
     const [isFetching, setIsFetching] = useState(false);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const toggleLike = () => {
         if (!isFetching) {
@@ -48,7 +47,6 @@ export const Post: React.FC<PostProps> = ({
             <div className={'Post__user'}>
                 <Cell before={<Avatar size={36} src={post.creator.avatar.url}/>}
                       subtitle={new Date(post.date).toLocaleString()}
-                      disabled
                       onClick={() => navigate(`/profile/${post.creator.id}`)}
                 >
                     {post.creator.first_name} {post.creator.last_name}

@@ -1,15 +1,22 @@
 import React from 'react';
 import {NavMenu, Page} from "../../components";
-import {SplitCol, SplitLayout, Epic, TabbarItem, Tabbar} from "@vkontakte/vkui";
+import {SplitCol, SplitLayout, Epic, TabbarItem, Tabbar, PanelHeader} from "@vkontakte/vkui";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {useScreenType} from "../../hooks";
 import {
-    Icon28NewsfeedOutline,
+    Icon28NewsfeedOutline, Icon28SearchOutline,
     Icon28UserCircleOutline,
     Icon28UsersOutline
 } from "@vkontakte/icons";
 import {useAtomValue} from "@mntm/precoil";
 import {currentUserAtom} from "../../store";
+
+const pathNames = Object({
+    edit: 'Редактирование профиля',
+    friends: 'Друзья',
+    search: 'Люди',
+    newsfeed: 'Лента'
+})
 
 interface MainLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -18,6 +25,7 @@ interface MainLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 export const MainLayout: React.FC<MainLayoutProps> = () => {
     const screenType = useScreenType();
     const navigate = useNavigate();
+
     const location = useLocation().pathname.split("/")[1];
     const user = useAtomValue(currentUserAtom);
     return (
@@ -48,9 +56,19 @@ export const MainLayout: React.FC<MainLayoutProps> = () => {
                             >
                                 <Icon28UsersOutline/>
                             </TabbarItem>
+                            <TabbarItem
+                                onClick={() => navigate(`/search`)}
+                                selected={location === 'search'}
+                                text="Люди"
+                            >
+                                <Icon28SearchOutline/>
+                            </TabbarItem>
                         </Tabbar>
                     )}>
                         <Page id={'main'}>
+                            {pathNames[location] &&
+                                <PanelHeader>{pathNames[location]}</PanelHeader>
+                            }
                             <Outlet/>
                         </Page>
                     </Epic>

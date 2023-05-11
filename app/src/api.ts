@@ -121,14 +121,20 @@ class API {
         })
     }
 
-    getWall(user_id: number) {
-        return this.call(`/user/getWall/${user_id}`, 'GET').then(data => {
+    getWall(user_id: number, offset: number = 0) {
+        return this.call(`/user/getWall/${user_id}?offset=${offset}`, 'GET').then(data => {
             return Promise.resolve(data)
         })
     }
 
-    getNewsfeed() {
-        return this.call(`/newsfeed/`, 'GET').then(data => {
+    getNewsfeed(offset: number = 0) {
+        return this.call(`/newsfeed/?offset=${offset}`, 'GET').then(data => {
+            return Promise.resolve(data)
+        })
+    }
+
+    searchUsers(query: string, offset: number = 0) {
+        return this.call(`/user/search/?q=${query}&offset=${offset}`, 'GET').then(data => {
             return Promise.resolve(data)
         })
     }

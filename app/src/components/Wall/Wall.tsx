@@ -1,20 +1,35 @@
 import React from "react";
-import {IPost} from "../../types";
+import {AnyFunction, IPost} from "../../types";
 import {Post} from "../Post/Post";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import './Wall.scss'
+import {Placeholder, Spinner} from "@vkontakte/vkui";
 
 interface WallProps extends React.HTMLAttributes<HTMLDivElement> {
-    posts: IPost[]
+    posts: IPost[],
+    hasMore: boolean,
+    next: AnyFunction
 }
 
 export const Wall: React.FC<WallProps> = ({
     posts,
+    hasMore,
+    next
 }) => {
+    const items = posts.map(item => (
+        <Post post={item} key={item.id}/>
+    ))
+
     return (
         <div className={'Wall'}>
-            {posts.map(item => (
-                <Post post={item} key={item.id}/>
-            ))}
+            <InfiniteScroll
+                dataLength={items.length}
+                next={next}
+                hasMore={hasMore}
+                loader={<Placeholder icon={<Spinner/>}/>}
+            >
+                {items}
+            </InfiniteScroll>
         </div>
     )
 }

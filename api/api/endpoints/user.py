@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 import security
 from storage.models import User, Friend, Post, Like, Photo
 from typing import List
@@ -76,7 +76,8 @@ async def edit_current_profile(
 async def get_wall(
         user: User = Depends(deps.get_user),
         current_user: User = Depends(deps.get_current_user),
-        db: AsyncSession = Depends(deps.get_db)
+        db: AsyncSession = Depends(deps.get_db),
+        offset: int = 0
 ):
     like_alias_1 = aliased(Like)
     like_alias_2 = aliased(Like)
@@ -99,9 +100,52 @@ async def get_wall(
     ).where(
         Post.wall_id == user.id
     ).group_by(Post.id).order_by(desc(Post.date))
-    posts = await db.execute(posts_query)
+    posts = await db.execute(posts_query.limit(20).offset(offset))
     posts = posts.fetchall()
     return list([schemas.Post(is_liked=i.is_liked > 0, likes_count=i.likes_count, **i.Post.__dict__) for i in posts])
+
+
+@router.get('/search', response_model=List[schemas.User])
+async def search_users(
+        q: str = '',
+        offset: int = 0,
+        current_user: User = Depends(deps.get_current_user),
+        db: AsyncSession = Depends(deps.get_db)
+):
+    if q:
+        users = select(
+            User.id,
+            Photo.url,
+            User.first_name,
+            User.last_name,
+            Friend.status.label('status'),
+            Friend.user_id
+        ).select_from(User).join(Friend, (
+            and_(
+                or_(
+                    User.id == Friend.user_id,
+                    User.id == Friend.friend_id
+                ),
+                or_(
+                    current_user.id == Friend.user_id,
+                    current_user.id == Friend.friend_id
+                )
+            )
+        ), isouter=True).join(Photo, Photo.id == User.avatar_id, isouter=True).where(
+            and_(
+                User.id != current_user.id,
+                func.lower(User.first_name + ' ' + User.last_name).like(f'%{q.lower()}%'),
+            )
+        ).limit(20).offset(offset)
+        users = await db.execute(users)
+    else:
+        users = await db.execute(select(User).limit(20).offset(offset))
+
+    users = users.fetchall()
+    return list(schemas.User(
+        **i._mapping,
+        friend_status=0 if not i.status else 3 if i.user_id == current_user.id and i.status == 1 else i.status
+    ) for i in users)
 
 
 @router.get("/{user_id}", response_model=schemas.User)

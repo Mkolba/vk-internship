@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-dom';
+import {Routes, Route, useLocation, useNavigate} from 'react-router-dom';
 import {
     LoginPage,
     NewsfeedPage,
@@ -8,6 +8,7 @@ import {
     RegistrationPage,
     EditProfilePage,
     FriendsPage,
+    SearchPage,
     MainLayout
 } from "./pages";
 import {useAtomValue} from "@mntm/precoil";
@@ -32,7 +33,7 @@ export const App: React.FC = () => {
               navigate('/login/')
           }
       });
-  })
+  }, [])
 
   return (
       <ConfigProvider appearance="light" platform="vkcom">
@@ -49,7 +50,7 @@ export const App: React.FC = () => {
                       <Route path={'edit'} element={<EditProfilePage/>}/>
                       <Route path={'newsfeed'} element={<NewsfeedPage/>}/>
                       <Route path={'friends/:userId'} element={<FriendsPage/>}/>
-                      <Route path="/" element={<Navigate to="/login" replace={true}/>} />
+                      <Route path={'search'} element={<SearchPage/>}/>
                   </Route>
               </Routes>
             </SplitLayout>

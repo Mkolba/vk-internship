@@ -37,6 +37,7 @@ export const FriendsCard: React.FC<FriendsCardProps> = ({
                         header={screenType === 'desktop' &&
                             <Header onClick={() => navigate(`/friends/${user.id}`)}
                                     indicator={screenType === 'desktop' ? friends.length ? friends.length : '' : null}
+                                    style={{cursor: 'pointer'}}
                             >
                                 Друзья
                             </Header>}
@@ -45,7 +46,7 @@ export const FriendsCard: React.FC<FriendsCardProps> = ({
                         {friends.length ?
                             screenType === 'desktop' ?
                                 <div className={'FriendsCard__list'}>
-                                    {friends.slice(0, 3).map(item => (
+                                    {friends.slice(0, 4).map(item => (
                                         <Tappable className={'FriendsCard__list__item'} key={item.id} onClick={() => navigate(`/profile/${item.id}`)}>
                                             <Avatar src={item.avatar?.url} size={64}/>
                                             {item.first_name}

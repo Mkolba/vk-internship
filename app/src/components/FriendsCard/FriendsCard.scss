@@ -6,7 +6,7 @@
 
 .FriendsCard__list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 4fr));
+  grid-template-columns: repeat(auto-fill, minmax(80px, 4fr));
   padding: 6px 0;
 
   .FriendsCard__list__item {

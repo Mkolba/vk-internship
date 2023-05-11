@@ -17,6 +17,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = () => {
     const [user, setUser] = useState<IUser | null>(null);
     const [fetchedPosts, setFetchedPosts] = useState<IPost[]>([]);
     const [isFetching, setIsFetching] = useState(false);
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
 
     const screenType = useScreenType();
 
@@ -27,6 +29,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = () => {
                 setUser(data);
                 setIsFetching(false);
                 setFetchedPosts(posts);
+                setHasMore(!(posts.length < 20))
             }).catch(() => {
                 setIsFetching(false)
             })
@@ -37,6 +40,14 @@ export const ProfilePage: React.FC<ProfilePageProps> = () => {
 
     const addPost = (post: IPost) => {
         setFetchedPosts([post, ...fetchedPosts]);
+    }
+
+    const updatePosts = () => {
+        api.getWall(Number(userId), offset + 20).then(data => {
+            setHasMore(!(data.length < 20))
+            setOffset(offset + 20)
+            setFetchedPosts([...fetchedPosts, ...data])
+        })
     }
 
     return (
@@ -51,7 +62,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = () => {
                             }
                             <PostEditor user={user} addPost={addPost}/>
                             {fetchedPosts.length ?
-                                <Wall posts={fetchedPosts}/>
+                                <Wall posts={fetchedPosts} hasMore={hasMore} next={updatePosts}/>
                                 :
                                 <Group header={<Header mode={'secondary'}>Ваша стена</Header>}>
                                     <Placeholder icon={<Icon56NewsfeedOutline/>}>

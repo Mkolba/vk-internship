@@ -4,7 +4,7 @@ import './UserCard.scss';
 import {Avatar, Button, Group, Cell, ScreenSpinner} from "@vkontakte/vkui";
 import {
     Icon24CancelOutline,
-    Icon24DeleteOutline,
+    Icon24DeleteOutline, Icon24DoorArrowLeftOutline,
     Icon24EducationOutline,
     Icon24PenOutline,
     Icon24PlaceOutline,
@@ -141,9 +141,20 @@ export const UserCard: React.FC<UserCardProps> = ({
                 </div>
                 <div className={'UserInfo__controls'}>
                     {currentUser?.id === user.id &&
-                        <Button size={'m'} mode={'secondary'} before={<Icon24PenOutline/>} stretched={screenType === 'mobile'} onClick={() => navigate('/edit')}>
-                            Редактировать
-                        </Button>
+                        <>
+                            <Button size={'m'} mode={'secondary'} before={<Icon24PenOutline/>} stretched={screenType === 'mobile'} onClick={() => navigate('/edit')}>
+                                Редактировать
+                            </Button>
+                            {screenType === 'mobile' &&
+                                <Button size={'m'} className={'Button--dangerous'} before={<Icon24DoorArrowLeftOutline/>} onClick={() => {
+                                    localStorage.removeItem('jwt-token');
+                                    setCurrentUser(null)
+                                    navigate('/login')
+                                }}>
+                                    Выйти
+                                </Button>
+                            }
+                        </>
                     }
                     {currentUser?.id !== user.id &&
                         <>

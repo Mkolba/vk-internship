@@ -6,3 +6,4 @@ export * from './PostEditor/PostEditor';
 export * from './Post/Post';
 export * from './Wall/Wall';
 export * from './UserCard/UserCard'
+export * from './UserCell/UserCell'

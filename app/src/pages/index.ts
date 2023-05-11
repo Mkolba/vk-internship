@@ -6,3 +6,4 @@ export * from './ProfilePage/ProfilePage';
 export * from './RegistrationPage/RegistrationPage';
 export * from './EditProfilePage/EditProfile';
 export * from './MainLayout/MainLayout';
+export * from './SearchPage/SearchPage';

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, Body
 from storage.models import User, Post, Like, Friend
 
 from sqlalchemy.orm import aliased
@@ -16,7 +16,8 @@ router = APIRouter()
 @router.get("/", response_model=List[schemas.Post])
 async def get_newsfeed(
         current_user: User = Depends(deps.get_current_user),
-        db: AsyncSession = Depends(deps.get_db)
+        db: AsyncSession = Depends(deps.get_db),
+        offset: int = 0
 ):
     friends = select(
         User.id
@@ -29,12 +30,12 @@ async def get_newsfeed(
             User.id != current_user.id
         )
     ), isouter=True).where(
-        or_(
-            Friend.user_id == current_user.id,
-            and_(
+        and_(
+            or_(
                 Friend.friend_id == current_user.id,
-                Friend.status == 2
-            )
+                Friend.user_id == current_user.id,
+            ),
+            Friend.status == 2
         )
     ).subquery('friends')
 
@@ -62,6 +63,6 @@ async def get_newsfeed(
             Post.creator_id == Post.wall_id
         )
     ).group_by(Post.id).order_by(desc(Post.date))
-    posts = await db.execute(posts_query)
+    posts = await db.execute(posts_query.limit(20).offset(offset))
 
     return list([schemas.Post(is_liked=i.is_liked > 0, likes_count=i.likes_count, **i.Post.__dict__) for i in posts.fetchall()])

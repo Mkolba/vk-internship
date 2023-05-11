@@ -1,59 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import './FriendsPage.scss';
-import {Group, RichCell, Avatar, Button, ButtonGroup, Header, Placeholder, ScreenSpinner, Spinner} from "@vkontakte/vkui";
-import {AnyFunction, IUser} from "../../types";
+import {Group, Header, Placeholder, ScreenSpinner, Spinner} from "@vkontakte/vkui";
+import {IUser} from "../../types";
 import {api} from "../../api";
-import {NavigateFunction, useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useAtomValue, useSetAtomState} from "@mntm/precoil";
 import {currentUserAtom, popoutAtom} from "../../store";
+import {UserCell} from "../../components";
 
 
 interface FriendsPageProps extends React.HTMLAttributes<HTMLDivElement> {
 
-}
-
-interface FriendCellProps extends React.HTMLAttributes<HTMLDivElement> {
-    item: IUser,
-    navigate: NavigateFunction,
-    delFriend: AnyFunction,
-    addFriend: AnyFunction,
-    showControls: boolean
-}
-
-const FriendCell: React.FC<FriendCellProps> = ({
-    item,
-    navigate,
-    delFriend,
-    addFriend,
-    showControls
-}) => {
-
-    return (
-        <RichCell
-            onClick={() => navigate(`/profile/${item.id}`)}
-            before={<Avatar size={72} src={item.avatar.url} />}
-            actions={showControls &&
-                <ButtonGroup mode="horizontal" gap="s" stretched>
-                    {item.friend_status === 1 &&
-                        <Button mode="primary" size="s" onClick={e => {
-                            e.stopPropagation();
-                            addFriend(item)
-                        }}>
-                            Добавить
-                        </Button>
-                    }
-                    <Button size="s" className={'Button--dangerous'} onClick={e => {
-                        e.stopPropagation();
-                        delFriend(item)
-                    }}>
-                        Удалить
-                    </Button>
-                </ButtonGroup>
-            }
-        >
-            {item.first_name} {item.last_name}
-        </RichCell>
-    )
 }
 
 export const FriendsPage: React.FC<FriendsPageProps> = () => {
@@ -62,7 +19,6 @@ export const FriendsPage: React.FC<FriendsPageProps> = () => {
     const [friends, setFriends] = useState<IUser[]>([]);
     const [isFetching, setIsFetching] = useState(false);
     const currentUser = useAtomValue(currentUserAtom);
-    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -104,7 +60,7 @@ export const FriendsPage: React.FC<FriendsPageProps> = () => {
                 {invoices.length ?
                     <Group header={<Header>Заявки в друзья</Header>}>
                         {invoices.map(item => (
-                            <FriendCell item={item} navigate={navigate} key={item.id} addFriend={addFriend} delFriend={delFriend} showControls={Number(userId) === currentUser?.id}/>
+                            <UserCell item={item} key={item.id} addFriend={addFriend} delFriend={delFriend} showControls={Number(userId) === currentUser?.id}/>
                         ))}
                     </Group>
                     : null
@@ -112,7 +68,7 @@ export const FriendsPage: React.FC<FriendsPageProps> = () => {
                 {others.length ?
                     <Group header={<Header>Друзья</Header>}>
                         {others.map(item => (
-                            <FriendCell item={item} navigate={navigate} key={item.id} addFriend={addFriend} delFriend={delFriend} showControls={Number(userId) === currentUser?.id}/>
+                            <UserCell item={item} key={item.id} addFriend={addFriend} delFriend={delFriend} showControls={Number(userId) === currentUser?.id}/>
                         ))}
                     </Group>
                     : null

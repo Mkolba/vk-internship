@@ -1,7 +1,7 @@
 import React from "react";
 import {Cell, SplitCol} from "@vkontakte/vkui";
 import {
-    Icon24NewsfeedOutline,
+    Icon24NewsfeedOutline, Icon24SearchOutline,
     Icon24UserCircleOutline,
     Icon24UsersOutline
 } from "@vkontakte/icons";
@@ -24,6 +24,9 @@ export const NavMenu: React.FC = () => {
             </Cell>
             <Cell before={<Icon24UsersOutline/>} onClick={() => navigate(`/friends/${user?.id}`)}>
                 Друзья
+            </Cell>
+            <Cell before={<Icon24SearchOutline/>} onClick={() => navigate(`/search`)}>
+                Люди
             </Cell>
         </SplitCol>
     )
