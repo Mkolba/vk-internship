@@ -1,5 +1,5 @@
 import React from "react";
-import {useAtomValue} from "@mntm/precoil";
+import {useAtomState} from "@mntm/precoil";
 import {currentUserAtom} from "../../store";
 import {Button, Avatar, Cell} from "@vkontakte/vkui";
 import {Icon16Dropdown, Icon24DoorArrowRightOutline} from '@vkontakte/icons';
@@ -11,10 +11,8 @@ interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const Header: React.FC<HeaderProps> = ({
-
-}) => {
-    const user = useAtomValue(currentUserAtom);
+export const Header: React.FC<HeaderProps> = () => {
+    const [user, setUser] = useAtomState(currentUserAtom);
     const navigate = useNavigate();
     return (
         <div className={'Header'}>
@@ -29,7 +27,11 @@ export const Header: React.FC<HeaderProps> = ({
                                 <Cell before={<Avatar src={user.avatar?.url} size={36}/>} subtitle="Перейти на страницу" onClick={() => navigate(`/profile/${user.id}`)}>
                                     {user.first_name} {user.last_name}
                                 </Cell>
-                                <Cell before={<Icon24DoorArrowRightOutline/>}>
+                                <Cell before={<Icon24DoorArrowRightOutline/>} onClick={() => {
+                                    localStorage.removeItem('jwt-token');
+                                    setUser(null)
+                                    navigate('/login')
+                                }}>
                                     Выйти
                                 </Cell>
                             </>

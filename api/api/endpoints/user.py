@@ -125,7 +125,6 @@ async def get_profile(
 
         ))
         friend = friend.fetchone()
-        print(friend)
         if not friend:
             friend_status = 0
         else:

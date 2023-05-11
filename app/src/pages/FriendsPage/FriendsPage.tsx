@@ -56,9 +56,7 @@ const FriendCell: React.FC<FriendCellProps> = ({
     )
 }
 
-export const FriendsPage: React.FC<FriendsPageProps> = ({
-
-})=> {
+export const FriendsPage: React.FC<FriendsPageProps> = () => {
     const {userId} = useParams();
     const setPopout = useSetAtomState(popoutAtom);
     const [friends, setFriends] = useState<IUser[]>([]);
@@ -72,7 +70,7 @@ export const FriendsPage: React.FC<FriendsPageProps> = ({
         api.getFriends(Number(userId)).then(data => {
             setFriends(data);
             setIsFetching(false);
-        }).catch(err => {
+        }).catch(() => {
             setIsFetching(false);
         })
     }, [userId])
@@ -82,7 +80,7 @@ export const FriendsPage: React.FC<FriendsPageProps> = ({
         api.addFriend(user.id).then(data => {
             setFriends([{...user, friend_status: data.friend_status}, ...friends.filter(item => item.id !== user.id)]);
             setPopout(null)
-        }).catch(err => {
+        }).catch(() => {
             setPopout(null)
         })
     }
@@ -92,7 +90,7 @@ export const FriendsPage: React.FC<FriendsPageProps> = ({
         api.delFriend(user.id).then(data => {
             setFriends([{...user, friend_status: data.friend_status}, ...friends.filter(item => item.id !== user.id)]);
             setPopout(null)
-        }).catch(err => {
+        }).catch(() => {
             setPopout(null)
         })
     }

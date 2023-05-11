@@ -12,7 +12,7 @@ import {
 } from "@vkontakte/icons";
 import {Popover} from "@vkontakte/vkui/dist/components/Popover/Popover";
 import {useScreenType} from "../../hooks";
-import {useAtomState, useAtomValue, useSetAtomState} from "@mntm/precoil";
+import {useAtomState, useSetAtomState} from "@mntm/precoil";
 import {currentUserAtom, popoutAtom} from "../../store";
 import {api} from "../../api";
 import {useNavigate} from "react-router-dom";
@@ -53,7 +53,7 @@ export const UserCard: React.FC<UserCardProps> = ({
             user.friend_status = data.friend_status
             setCurrentUser(currentUser)
             setPopout(null)
-        }).catch(err => {
+        }).catch(() => {
             setPopout(null)
         })
     }
@@ -64,7 +64,7 @@ export const UserCard: React.FC<UserCardProps> = ({
             user.friend_status = data.friend_status
             setCurrentUser(currentUser)
             setPopout(null)
-        }).catch(err => {
+        }).catch(() => {
             setPopout(null)
         })
     }
@@ -117,8 +117,8 @@ export const UserCard: React.FC<UserCardProps> = ({
                         }
                     </div>
                     <div className={'UserInfo'}>
-                        <div className={'UserInfo__name'}>
-                            {user.first_name} {user.last_name}
+                        <div className={'UserInfo__name'} title={`${user.first_name} ${user.last_name}`}>
+                            <span>{user.first_name} {user.last_name}</span>
                             {user.birthdate &&
                                 <div className={'UserInfo__age'}>
                                     {getAge(user.birthdate)} {declOfAge(getAge(user.birthdate))}
@@ -127,13 +127,13 @@ export const UserCard: React.FC<UserCardProps> = ({
                         </div>
                         <div className={'UserInfo__other'}>
                             {user.city &&
-                                <div className={'UserInfo__other__item'}>
-                                    <Icon24PlaceOutline/> {user.city}
+                                <div className={'UserInfo__other__item'} title={user.city}>
+                                    <Icon24PlaceOutline/> <span>{user.city}</span>
                                 </div>
                             }
                             {user.study_place &&
-                                <div className={'UserInfo__other__item'}>
-                                    <Icon24EducationOutline/> {user.study_place}
+                                <div className={'UserInfo__other__item'} title={user.study_place}>
+                                    <Icon24EducationOutline/> <span>{user.study_place}</span>
                                 </div>
                             }
                         </div>

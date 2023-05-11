@@ -9,7 +9,6 @@ import {
     FormLayout,
     FormLayoutGroup, FormStatus,
     Input,
-    ScreenSpinner,
     Tappable
 } from "@vkontakte/vkui";
 import {Icon16HideOutline, Icon16ViewOutline, Icon24Chevron} from "@vkontakte/icons";
@@ -22,9 +21,7 @@ interface RegistrationPageProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const RegistrationPage: React.FC<RegistrationPageProps> = ({
-
-})=> {
+export const RegistrationPage: React.FC<RegistrationPageProps> = () => {
     const setPopout = useSetAtomState(popoutAtom);
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [firstName, setFirstName] = useState('');
@@ -36,16 +33,8 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
     const [errorText, setErrorText] = useState('');
     const navigate = useNavigate();
 
-    const authorize = () => {
-        if (login && password.length >= 8 && firstName && lastName) {
-            setShowError(false);
-        } else {
-            setShowError(true);
-        }
-    }
-
     const createUser = () => {
-        if (!login || !password || !firstName || !lastName) {
+        if (!login || password.length < 8 || !firstName || !lastName) {
             setShowError(true)
             return
         }
@@ -57,7 +46,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
             login: login
         }
 
-        api.register(options).then(data => {
+        api.register(options).then(() => {
             const {payload} = api.getToken()
             setPopout(null);
             navigate(`/profile/${payload['sub']}`)
@@ -89,10 +78,10 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
                         }
                         <FormLayoutGroup mode="horizontal">
                             <FormItem top="Имя" status={showError && !firstName ? 'error' : 'default'}>
-                                <Input placeholder={'Иван'} name={'name'} value={firstName} onChange={e => setFirstName(e.currentTarget.value)}/>
+                                <Input placeholder={'Иван'} name={'name'} value={firstName} onChange={e => setFirstName(e.currentTarget.value.trim())}/>
                             </FormItem>
                             <FormItem top="Фамилия" status={showError && !lastName ? 'error' : 'default'}>
-                                <Input placeholder={'Петров'} name={'lastname'} value={lastName} onChange={e => setLastName(e.currentTarget.value)}/>
+                                <Input placeholder={'Петров'} name={'lastname'} value={lastName} onChange={e => setLastName(e.currentTarget.value.trim())}/>
                             </FormItem>
                         </FormLayoutGroup>
                         <FormItem status={showError && birthdate && birthdate > new Date() ? 'error' : 'default'} top={'Дата рождения'}>
@@ -104,7 +93,7 @@ export const RegistrationPage: React.FC<RegistrationPageProps> = ({
                             />
                         </FormItem>
                         <FormItem status={showError && !login ? 'error' : 'default'}>
-                            <Input placeholder={'E-mail'} name={'email'} value={login} onChange={e => setLogin(e.currentTarget.value)}/>
+                            <Input placeholder={'E-mail'} name={'email'} value={login} onChange={e => setLogin(e.currentTarget.value.trim())}/>
                         </FormItem>
                         <FormItem bottom={'Как минимум 8 символов'} status={showError && password.length < 8 ? 'error' : 'default'}>
                             <Input placeholder={'Пароль'} type={isPasswordVisible ? 'text' : 'password'} autoComplete="current-password" after={

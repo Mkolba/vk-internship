@@ -13,6 +13,7 @@ import {currentUserAtom} from "../../store";
 export const NavMenu: React.FC = () => {
     const navigate = useNavigate();
     const user = useAtomValue(currentUserAtom);
+
     return (
         <SplitCol maxWidth={220} width={'100%'}>
             <Cell before={<Icon24UserCircleOutline/>} onClick={() => navigate(`/profile/${user?.id}`)}>

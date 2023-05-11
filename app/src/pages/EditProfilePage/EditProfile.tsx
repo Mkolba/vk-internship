@@ -19,9 +19,7 @@ interface EditProfileProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const EditProfilePage: React.FC<EditProfileProps> = ({
-
-})=> {
+export const EditProfilePage: React.FC<EditProfileProps> = () => {
     const setPopout = useSetAtomState(popoutAtom);
     const [currentUser, setCurrentUser] = useAtomState(currentUserAtom);
     const [firstName, setFirstName] = useState(currentUser?.first_name);
@@ -52,7 +50,7 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({
         api.editUser(options).then(resp => {
             setCurrentUser(resp as IUser)
             setPopout(null)
-        }).catch(err => {
+        }).catch(() => {
             setPopout(null)
         })
     }
@@ -62,10 +60,10 @@ export const EditProfilePage: React.FC<EditProfileProps> = ({
             <FormLayout>
                 <FormLayoutGroup mode="horizontal">
                     <FormItem top="Имя" status={showError && !firstName ? 'error' : 'default'}>
-                        <Input placeholder={'Иван'} name={'name'} value={firstName} onChange={e => setFirstName(e.currentTarget.value)}/>
+                        <Input placeholder={'Иван'} name={'name'} value={firstName} onChange={e => setFirstName(e.currentTarget.value.trim())}/>
                     </FormItem>
                     <FormItem top="Фамилия" status={showError && !lastName ? 'error' : 'default'}>
-                        <Input placeholder={'Петров'} name={'lastname'} value={lastName} onChange={e => setLastName(e.currentTarget.value)}/>
+                        <Input placeholder={'Петров'} name={'lastname'} value={lastName} onChange={e => setLastName(e.currentTarget.value.trim())}/>
                     </FormItem>
                 </FormLayoutGroup>
                 <FormLayoutGroup mode="horizontal">

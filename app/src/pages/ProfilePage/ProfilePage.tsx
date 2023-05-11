@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import './ProfilePage.scss';
 import {FriendsCard, PostEditor, Wall, UserCard} from "../../components";
 import {Group, Header, Placeholder, Spinner, SplitCol, SplitLayout} from "@vkontakte/vkui";
-import {useAtomValue} from "@mntm/precoil";
-import {currentUserAtom} from "../../store";
 import {Icon56NewsfeedOutline, Icon28IncognitoOutline} from "@vkontakte/icons";
 import {useParams} from "react-router-dom";
 import {useScreenType} from "../../hooks";
@@ -14,9 +12,7 @@ interface ProfilePageProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const ProfilePage: React.FC<ProfilePageProps> = ({
-
-})=> {
+export const ProfilePage: React.FC<ProfilePageProps> = () => {
     const {userId} = useParams();
     const [user, setUser] = useState<IUser | null>(null);
     const [fetchedPosts, setFetchedPosts] = useState<IPost[]>([]);
@@ -31,10 +27,10 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                 setUser(data);
                 setIsFetching(false);
                 setFetchedPosts(posts);
-            }).catch(err => {
+            }).catch(() => {
                 setIsFetching(false)
             })
-        }).catch(err => {
+        }).catch(() => {
             setIsFetching(false);
         })
     }, [userId])

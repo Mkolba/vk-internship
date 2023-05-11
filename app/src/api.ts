@@ -1,4 +1,3 @@
-import { redirect } from "react-router-dom"
 import {currentUserAtom} from "./store";
 const DEFAULT_API_URL = 'http://192.168.0.10/api';
 
@@ -21,13 +20,16 @@ function parseJwt (token: string) {
 }
 
 class API {
-    getToken(shouldRedirect: boolean = true) {
+    getToken() {
         const token = localStorage.getItem('jwt-token')
-        if (!token && shouldRedirect) redirect('/login')
         return {payload: token ? parseJwt(token) : '', token: token}
     }
     async call(path: string, type: RequestType, params: any = {}) {
-        const {token} = this.getToken(path !== '/login/access_token');
+        let token = ''
+        if (!['/login/access-token/', '/register/'].includes(path)) {
+            token = this.getToken()['token'] as string;
+        }
+
         let headers: any = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'};
         let options = {
             method: type,
@@ -43,12 +45,18 @@ class API {
         return fetch(`${DEFAULT_API_URL}${path}`, {...options}).then(response => {
             const contentType = response.headers.get('Content-Type') || '';
             if (response.ok && contentType.includes('application/json')) {
-                return response.json().catch(error => {
+                return response.json().catch(() => {
                     return Promise.reject('500');
                 });
             }
             if (![200, 503].includes(response.status)) {
-                return Promise.reject(response.json())
+                return Promise.reject(response.json().then(data => {
+                    if (Array.isArray(data.detail)) {
+                        return {detail: data.detail[0].msg}
+                    } else {
+                        return data
+                     }
+                }))
             }
         }).catch(error => {
             return Promise.reject(error)
@@ -69,8 +77,11 @@ class API {
 
     authUser() {
         const {payload} = this.getToken()
-        this.getUser(Number(payload['sub'])).then(data => {
+        return this.getUser(Number(payload['sub'])).then(data => {
             currentUserAtom.set(data);
+            return Promise.resolve({success: true})
+        }).catch(() => {
+            return Promise.resolve({success: false})
         })
     }
 
@@ -116,6 +127,12 @@ class API {
         })
     }
 
+    getNewsfeed() {
+        return this.call(`/newsfeed/`, 'GET').then(data => {
+            return Promise.resolve(data)
+        })
+    }
+
     uploadPhoto = (formData: any) => {
         return this.call(`/photos/upload`, 'POST', {'formData': formData}).then(data => {
             return Promise.resolve(data)
@@ -125,7 +142,7 @@ class API {
     login(options: {formData: any}) {
         return this.call(`/login/access-token`, 'POST', options).then(data => {
             localStorage.setItem('jwt-token', data.access_token)
-            this.authUser();
+            this.authUser().then(() => {});
             return Promise.resolve({success: true})
         }).catch(error => {
             return Promise.reject(error)
@@ -138,7 +155,7 @@ class API {
             this.authUser();
             return Promise.resolve({success: true})
         }).catch(error => {
-            return Promise.resolve(error)
+            return Promise.reject(error)
         })
     }
 }

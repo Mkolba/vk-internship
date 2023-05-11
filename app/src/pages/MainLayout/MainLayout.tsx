@@ -15,9 +15,7 @@ interface MainLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({
-
-})=> {
+export const MainLayout: React.FC<MainLayoutProps> = () => {
     const screenType = useScreenType();
     const navigate = useNavigate();
     const location = useLocation().pathname.split("/")[1];

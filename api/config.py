@@ -14,6 +14,6 @@ database = BetterDict({
 
 SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://{database.user}:{database.password}@{database.host}/{database.database}"
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'f4d4a3f71a7174b30c1c43567803b8a6e6128ab6a639e5224426fb99079a7c4a')
+SECRET_KEY = os.getenv('SECRET_KEY', 'f4d4a3f71a7174b30c1c28297003b8a6e6128ab6a639e5224426fb99079a7c4a')
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 24 * 60

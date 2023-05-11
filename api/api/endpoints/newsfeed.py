@@ -5,6 +5,7 @@ from sqlalchemy.orm import aliased
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import and_, or_, func, desc, any_
+from typing import List
 
 from api import deps
 import schemas
@@ -12,7 +13,7 @@ import schemas
 router = APIRouter()
 
 
-@router.get("/", response_model=schemas.PostList)
+@router.get("/", response_model=List[schemas.Post])
 async def get_newsfeed(
         current_user: User = Depends(deps.get_current_user),
         db: AsyncSession = Depends(deps.get_db)
@@ -32,7 +33,7 @@ async def get_newsfeed(
             Friend.user_id == current_user.id,
             and_(
                 Friend.friend_id == current_user.id,
-                Friend.status == 1
+                Friend.status == 2
             )
         )
     ).subquery('friends')
@@ -56,8 +57,11 @@ async def get_newsfeed(
         ),
         isouter=True
     ).where(
-        Post.wall_id == any_(friends)
+        and_(
+            Post.wall_id == any_(friends),
+            Post.creator_id == Post.wall_id
+        )
     ).group_by(Post.id).order_by(desc(Post.date))
     posts = await db.execute(posts_query)
 
-    return schemas.PostList(posts=list([schemas.Post(is_liked=i.is_liked > 0, likes_count=i.likes_count, **i.Post.__dict__) for i in posts.fetchall()]))
+    return list([schemas.Post(is_liked=i.is_liked > 0, likes_count=i.likes_count, **i.Post.__dict__) for i in posts.fetchall()])

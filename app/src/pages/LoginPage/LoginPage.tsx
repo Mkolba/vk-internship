@@ -12,9 +12,7 @@ interface LoginPageProps extends React.HTMLAttributes<HTMLDivElement> {
 
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({
-
-})=> {
+export const LoginPage: React.FC<LoginPageProps> = () => {
     const setPopout = useSetAtomState(popoutAtom);
     const [isPasswordVisible, setPasswordVisible] = useState(false);
     const [login, setLogin] = useState('');
@@ -29,7 +27,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             data.append('username', login)
             data.append('password', password)
             setPopout(<ScreenSpinner/>);
-            api.login({formData: data}).then(data => {
+            api.login({formData: data}).then(() => {
                 const {payload} = api.getToken()
                 setPopout(null);
                 navigate(`/profile/${payload['sub']}`)
